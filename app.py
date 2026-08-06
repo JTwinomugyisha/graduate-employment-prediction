@@ -27,17 +27,14 @@ with open("feature_columns.pkl", "rb") as f:
 # Background image + custom CSS for beautiful interface
 st.markdown("""
 <style>
-    /* Background image */
+    /* Clean solid background */
     .stApp {
-        background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=800&fit=crop');
-        background-attachment: fixed;
-        background-size: cover;
-        background-position: center;
+        background-color: #f8f9fa;
     }
     
-    /* Semi-transparent overlay for readability */
+    /* Main content area */
     .main {
-        background-color: rgba(255, 255, 255, 0.95);
+        background-color: white;
         border-radius: 10px;
     }
     
