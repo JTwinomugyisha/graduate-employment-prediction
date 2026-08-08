@@ -165,9 +165,9 @@ with tab1:
 
     col5, col6 = st.columns(2)
     with col5:
-        refugee = st.selectbox("Refugee Status", list(encoders["Refugee Status"].classes_))
+        refugee = st.selectbox("Refugee Status", ["No", "Yes"])
     with col6:
-        disability = st.selectbox("Disability Status", list(encoders["Disability status"].classes_))
+        disability = st.selectbox("Disability Status", ["No", "Yes"])
 
     st.markdown("---")
     predict_btn = st.button("🔍 Generate Prediction", use_container_width=True, type="primary")
