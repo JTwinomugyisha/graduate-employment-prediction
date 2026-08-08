@@ -1,0 +1,37 @@
+name: ETL Pipeline (Scheduled)
+
+# Runs automatically every Monday at 06:00 UTC, and can also be triggered
+# manually or whenever the raw data / pipeline script changes.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch: {}
+  push:
+    paths:
+      - "graduate_placement_dataset.csv"
+      - "clean_pipeline.py"
+
+jobs:
+  run-etl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Run cleaning pipeline
+        run: python clean_pipeline.py
+
+      - name: Commit updated cleaned data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action (scheduled ETL)"
+          git add graduate_placement_cleaned_FINAL.csv graduate_placement.db
+          git diff --staged --quiet || git commit -m "Automated pipeline run: refresh cleaned data"
+          git push
