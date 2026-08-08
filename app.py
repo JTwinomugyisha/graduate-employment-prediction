@@ -126,13 +126,6 @@ with st.sidebar:
         st.metric("Overall placement rate", f"{overall_rate:.0%}")
         st.metric("Total graduates on file", len(historical_data))
 
-    st.markdown("### ♿ Accessibility")
-    st.write("""
-    ✓ Screen reader compatible
-    ✓ High contrast, no color-only signals
-    ✓ Keyboard navigable
-    """)
-
 # =====================================================================
 # Tabs
 # =====================================================================
@@ -252,39 +245,125 @@ with tab1:
         st.caption("This prediction is decision support for Refactory staff, not a final determination.")
 
 # =====================================================================
-# TAB 2: ANALYTICS
+# TAB 2: ANALYTICS DASHBOARD
 # =====================================================================
 with tab2:
-    st.markdown("### 📊 Historical Placement Analytics")
+    st.markdown("### 📊 Placement Analytics Dashboard")
 
     if historical_data is not None:
+        hd = historical_data.copy()
+        hd["is_employed"] = (hd["Placement Status"] == "Employed").astype(int)
+
+        # -------------------------------------------------------------
+        # ROW 1 — KPI cards
+        # -------------------------------------------------------------
+        overall_rate = hd["is_employed"].mean()
+        total_grads = len(hd)
+        at_risk_count = int((hd["is_employed"] == 0).sum())
+
+        # Best / worst program by placement rate (min sample size 15)
+        prog_counts = hd["Program Name"].value_counts()
+        valid_progs = prog_counts[prog_counts >= 15].index
+        prog_rate = hd[hd["Program Name"].isin(valid_progs)].groupby("Program Name")["is_employed"].mean()
+        best_prog = prog_rate.idxmax()
+        worst_prog = prog_rate.idxmin()
+
+        k1, k2, k3, k4 = st.columns(4)
+        k1.metric("Overall Placement Rate", f"{overall_rate:.0%}")
+        k2.metric("Total Graduates", f"{total_grads:,}")
+        k3.metric("Currently At-Risk", f"{at_risk_count:,}", delta=f"{at_risk_count/total_grads:.0%} of total", delta_color="inverse")
+        k4.metric("Best Program", best_prog, delta=f"{prog_rate[best_prog]:.0%} placed")
+
+        st.markdown("---")
+
+        # -------------------------------------------------------------
+        # ROW 2 — Placement rate by Program & Sponsorship
+        # -------------------------------------------------------------
         col1, col2 = st.columns(2)
 
         with col1:
             st.markdown("#### Placement Rate by Program")
-            rate = historical_data.groupby("Program Name")["Placement Status"].apply(
-                lambda x: (x == "Employed").mean()
-            ).sort_values(ascending=False)
-
-            fig, ax = plt.subplots(figsize=(8, 5))
-            rate.plot(kind="barh", ax=ax, color="#0F4C81")
+            rate = hd[hd["Program Name"].isin(valid_progs)].groupby("Program Name")["is_employed"].mean().sort_values()
+            fig, ax = plt.subplots(figsize=(7, 5))
+            colors = ["#DC3545" if v < 0.5 else "#FFC107" if v < 0.65 else "#28A745" for v in rate.values]
+            rate.plot(kind="barh", ax=ax, color=colors)
             ax.set_xlabel("Employment Rate")
             ax.set_xlim(0, 1)
+            for i, v in enumerate(rate.values):
+                ax.text(v + 0.02, i, f"{v:.0%}", va="center", fontsize=9, fontweight="bold")
             plt.tight_layout()
             st.pyplot(fig)
 
         with col2:
             st.markdown("#### Placement Rate by Sponsorship")
-            rate2 = historical_data.groupby("Sponsorship Type")["Placement Status"].apply(
-                lambda x: (x == "Employed").mean()
-            ).sort_values(ascending=False)
-
-            fig, ax = plt.subplots(figsize=(8, 5))
-            rate2.plot(kind="barh", ax=ax, color="#28A745")
+            spon_counts = hd["Sponsorship Type"].value_counts()
+            valid_spon = spon_counts[spon_counts >= 15].index
+            rate2 = hd[hd["Sponsorship Type"].isin(valid_spon)].groupby("Sponsorship Type")["is_employed"].mean().sort_values()
+            fig, ax = plt.subplots(figsize=(7, 5))
+            colors2 = ["#DC3545" if v < 0.5 else "#FFC107" if v < 0.65 else "#28A745" for v in rate2.values]
+            rate2.plot(kind="barh", ax=ax, color=colors2)
             ax.set_xlabel("Employment Rate")
             ax.set_xlim(0, 1)
+            for i, v in enumerate(rate2.values):
+                ax.text(v + 0.02, i, f"{v:.0%}", va="center", fontsize=9, fontweight="bold")
             plt.tight_layout()
             st.pyplot(fig)
+
+        st.markdown("---")
+
+        # -------------------------------------------------------------
+        # ROW 3 — Trend over time + Education level
+        # -------------------------------------------------------------
+        col3, col4 = st.columns(2)
+
+        with col3:
+            if "Graduation Year" in hd.columns:
+                st.markdown("#### Placement Rate Trend by Cohort Year")
+                trend = hd.groupby("Graduation Year")["is_employed"].mean().sort_index()
+                fig, ax = plt.subplots(figsize=(7, 4.5))
+                ax.plot(trend.index.astype(str), trend.values, marker="o", linewidth=2, color="#0F4C81")
+                ax.set_ylabel("Employment Rate")
+                ax.set_ylim(0, 1)
+                ax.grid(axis="y", alpha=0.3)
+                for x, v in zip(trend.index.astype(str), trend.values):
+                    ax.annotate(f"{v:.0%}", (x, v), textcoords="offset points", xytext=(0, 8), ha="center", fontsize=9)
+                plt.tight_layout()
+                st.pyplot(fig)
+
+        with col4:
+            st.markdown("#### Placement Rate by Education Level")
+            edu_counts = hd["Education Level"].value_counts()
+            valid_edu = edu_counts[edu_counts >= 15].index
+            rate3 = hd[hd["Education Level"].isin(valid_edu)].groupby("Education Level")["is_employed"].mean().sort_values(ascending=False)
+            fig, ax = plt.subplots(figsize=(7, 4.5))
+            colors3 = ["#28A745" if v >= 0.6 else "#FFC107" if v >= 0.5 else "#DC3545" for v in rate3.values]
+            rate3.plot(kind="bar", ax=ax, color=colors3)
+            ax.set_ylabel("Employment Rate")
+            ax.set_ylim(0, 1)
+            ax.axhline(y=0.5, color="gray", linestyle="--", alpha=0.5)
+            plt.xticks(rotation=35, ha="right")
+            plt.tight_layout()
+            st.pyplot(fig)
+
+        st.markdown("---")
+
+        # -------------------------------------------------------------
+        # ROW 4 — Actionable business decision box
+        # -------------------------------------------------------------
+        st.markdown("### 🎯 What This Means for Placement Strategy")
+        st.markdown(f"""
+        <div class="support-box">
+            <p><strong>{at_risk_count} graduates ({at_risk_count/total_grads:.0%})</strong> are currently
+            flagged as not-yet-employed.</p>
+            <p><strong>Priority action:</strong> <em>{worst_prog}</em> has the lowest placement rate
+            ({prog_rate[worst_prog]:.0%}) among programs with sufficient data — prioritize employer
+            outreach and curriculum-market alignment review for this program first.</p>
+            <p><strong>What's working:</strong> <em>{best_prog}</em> leads placement at
+            {prog_rate[best_prog]:.0%} — study its employer partnerships as a template for
+            lower-performing programs.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
     else:
         st.warning(
             "Historical data not found. In the notebook, run:\n\n"
@@ -314,4 +393,11 @@ with tab3:
     - Reflects historical patterns; future labor market may differ
     - Individual factors (motivation, interview skills, networks) aren't in the data
     - Decision-support only — always pair with human judgement
+    """)
+
+    st.markdown("### ♿ Accessibility")
+    st.info("""
+    - **Screen reader compatible** — all inputs have descriptive labels, headings use semantic structure
+    - **High contrast, no color-only signals** — status is always paired with text/icons (✅ / ⚠️), not color alone
+    - **Keyboard navigable** — Tab through inputs, Enter to select, works without a mouse
     """)
