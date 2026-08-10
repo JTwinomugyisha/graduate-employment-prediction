@@ -509,7 +509,8 @@ with tab2:
 with tab3:
     st.markdown("### How This Model Works")
     st.write("""
-    **Model:** Random Forest Classifier
+    **Model:** Random Forest Classifier  
+    
     **Accuracy:** 77% on held-out test data
 
     **Features used:** Program, Sponsorship Type, Education Level, Youth status,
