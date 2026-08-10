@@ -236,30 +236,95 @@ with tab1:
             </div>
             """, unsafe_allow_html=True)
 
-            st.markdown("### 💡 Recommended Support Actions")
-            recs = []
+            st.markdown("### 💡 Recommended Support Plan")
+
+            plans = []
+
             if education in ["Unknown", "Secondary (O-Level)", "Secondary (A-Level)"]:
-                recs.append("📚 Offer skills certification or upskilling pathway.")
+                plans.append({
+                    "title": "📚 Credential Gap — Upskilling Pathway",
+                    "why": f"Education level on file ({education}) is entry-level, which can filter this graduate out of employer screening before skills are even assessed.",
+                    "steps": [
+                        "Book a skills-audit session within 5 business days to identify a certificate or micro-credential that closes the gap fastest",
+                        "Compile a portfolio of Refactory project work — something concrete to show alongside the credential",
+                        "Add graduate to the next available portfolio-review workshop",
+                        "Target: enrolled in an upskilling track within 2 weeks",
+                    ]
+                })
+
             if sponsorship in ["10X Program", "Self-sponsored"]:
-                recs.append(f"🤝 Prioritize employer-matching outreach ('{sponsorship}' historically needs more support).")
+                plans.append({
+                    "title": f"🤝 Employer Access — '{sponsorship}' Pathway",
+                    "why": f"Graduates on '{sponsorship}' sponsorship historically have lower placement rates, likely due to fewer built-in employer partnerships compared to other sponsorship tracks.",
+                    "steps": [
+                        "Schedule a 1:1 with a placement officer within 1 week (not the general job board)",
+                        "Identify 3-5 target employers based on program + location fit",
+                        "Prepare one tailored application per employer, not a generic CV blast",
+                        "Officer follows up with each employer contact at the 2-week mark",
+                    ]
+                })
+
             if youth == "No":
-                recs.append("📍 Check whether non-youth-targeted employer programs apply.")
-            if not recs:
-                recs.append("📞 Schedule a check-in call to identify individual barriers (job search skills, interview readiness, network gaps).")
-            for r in recs:
-                st.write(f"- {r}")
+                plans.append({
+                    "title": "📍 Program Eligibility Review",
+                    "why": "Graduate is outside the 18-35 youth bracket, so youth-targeted employer partnerships and funding programs may not apply.",
+                    "steps": [
+                        "Cross-check this graduate against Refactory's non-youth employer partner list",
+                        "If no non-youth pathway exists yet for their program, flag to program lead as a gap",
+                        "Route to general (non-age-restricted) placement channels in the meantime",
+                    ]
+                })
+
+            if not plans:
+                plans.append({
+                    "title": "📞 Individual Assessment",
+                    "why": "No structural risk factor stood out — education, sponsorship, and age bracket all look typical for a successfully-placed graduate. The barrier is likely individual.",
+                    "steps": [
+                        "Call within 1 week — open-ended: 'what's been your experience applying so far?'",
+                        "Based on their answer, route to: interview prep, CV/portfolio review, or a recruiter/alum network introduction",
+                        "Re-check status at 30 days",
+                    ]
+                })
+
+            for plan in plans:
+                with st.container():
+                    st.markdown(f"**{plan['title']}**")
+                    st.caption(plan["why"])
+                    for i, step in enumerate(plan["steps"], 1):
+                        st.markdown(f"{i}. {step}")
+                    st.markdown("")
 
         if refugee == "Yes" or disability == "Yes":
-            st.markdown("""
-            <div class="support-box">
-                <h3>🌍 Specialized Support Routing</h3>
-                <p>This graduate has disclosed refugee and/or disability status.</p>
-                <p><strong>Action:</strong> Route to Refactory's specialized placement support
-                track for tailored employer matching and any needed accommodations.</p>
-                <p><strong>Important:</strong> Do not assume the cause of non-placement is
-                related to this status — treat this as a support-routing flag, not a diagnosis.</p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown("---")
+            st.markdown("### 🌍 Specialized Support Checklist")
+            st.caption(
+                "These are procedural steps within Refactory's control — not assumptions "
+                "about why this graduate hasn't been placed. Our fairness audit found no "
+                "reliable link between these statuses and placement outcomes, so treat this "
+                "as a standard support checklist, not a diagnosis."
+            )
+
+            if refugee == "Yes":
+                with st.container():
+                    st.markdown("**🪪 Refugee Status — Documentation & Access Checklist**")
+                    st.markdown("""
+1. Confirm work permit / right-to-work documentation is current and on file — if expired or pending, flag to legal/admin support immediately, since this is often the actual blocker, not skill
+2. Verify prior credentials (secondary/university) have been through any required local recognition or equivalency process — assist with this if not yet done
+3. Match to Refactory's employer partners with **prior experience hiring refugee talent**, so this isn't the employer's first case
+4. If no such employer exists for this graduate's program, loop in the partnerships team to identify one — this is a gap to close, not work around
+5. Provide reference/verification support directly (Refactory vouching) if the graduate's local reference network is limited
+                    """)
+
+            if disability == "Yes":
+                with st.container():
+                    st.markdown("**♿ Disability Status — Accessibility & Accommodation Checklist**")
+                    st.markdown("""
+1. Ask the graduate directly what accommodations (if any) they'd want during interviews and on the job — do not assume; this varies per person
+2. Offer accessible interview logistics as standard: remote/flexible-time option, materials in accessible format
+3. Check employer eligibility for Uganda's Persons with Disabilities Act workplace accommodation support/subsidies, and raise this with the employer upfront so accommodation cost isn't framed as solely theirs to bear
+4. Add employer to (or check against) Refactory's list of employers with positive prior experience hiring graduates with disabilities
+5. Follow up at 2 weeks post-introduction specifically to check whether any accommodation gap emerged that needs addressing
+                    """)
 
         st.caption("This prediction is decision support for Refactory staff, not a final determination.")
 
