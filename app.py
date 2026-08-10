@@ -294,6 +294,53 @@ with tab1:
                         st.markdown(f"{i}. {step}")
                     st.markdown("")
 
+            # -----------------------------------------------------------
+            # Universal support toolkit — applies regardless of which
+            # specific risk factor was flagged above.
+            # -----------------------------------------------------------
+            st.markdown("---")
+            st.markdown("### 🧰 General Support Toolkit")
+            st.caption("Standard interventions available for this graduate, independent of the specific flag above.")
+
+            ROLE_MAP = {
+                "CSE - Python": ["Backend Developer", "Data Analyst", "Automation/QA Engineer", "Junior Python Developer"],
+                "CSE - Javascript": ["Frontend Developer", "Full-Stack Developer (Junior)", "Web Developer"],
+                "Data Science & ML": ["Data Analyst", "Junior Data Scientist", "BI/Reporting Analyst"],
+                "AI/ML": ["ML Engineer (Junior)", "Data Analyst", "AI Research Assistant"],
+                "Product Management": ["Associate Product Manager", "Business Analyst", "Project Coordinator"],
+                "Product Design (UX/UI)": ["UI/UX Designer", "Junior Product Designer", "Graphic/Digital Designer"],
+                "Cybersecurity": ["SOC Analyst (Junior)", "IT Security Support", "Compliance Analyst"],
+                "Cloud Computing": ["Cloud Support Associate", "DevOps Trainee", "IT Infrastructure Support"],
+                "Data Engineering & Analytics": ["Data Analyst", "ETL/Reporting Associate", "BI Analyst"],
+                "Blockchain Development": ["Junior Blockchain Developer", "Backend Developer (adjacent — fintech/distributed systems)"],
+                "Apprenticeship": ["Depends on host organization — check apprenticeship placement notes"],
+                "Foundations of Software Development": ["Junior Developer (any stack)", "QA/Testing Associate", "Technical Support"],
+            }
+            suggested_roles = ROLE_MAP.get(program, ["Role matching not yet mapped for this program — consult program lead"])
+
+            col_a, col_b = st.columns(2)
+
+            with col_a:
+                st.markdown("**🎯 Roles to recommend, based on program**")
+                for role in suggested_roles:
+                    st.markdown(f"- {role}")
+                if len(suggested_roles) > 1 and "not yet mapped" not in suggested_roles[0]:
+                    st.caption(
+                        "If the primary role type isn't landing after 2-3 applications, "
+                        "try the adjacent roles above — same core skills, different job title, "
+                        "often less competitive."
+                    )
+
+            with col_b:
+                st.markdown("**🛠️ Standard interventions**")
+                st.markdown("""
+- **CV/portfolio review** — book with a placement officer; check it's tailored per role, not generic
+- **Mock interview** — 1 session minimum before first real employer interview
+- **Mentorship match** — pair with a working alum from the same program for informal guidance
+- **Job board priority listing** — flag profile as "actively seeking" for 2 weeks of extra visibility
+- **Peer accountability group** — join other at-risk graduates from this cohort for weekly check-ins
+                """)
+
         if refugee == "Yes" or disability == "Yes":
             st.markdown("---")
             st.markdown("### 🌍 Specialized Support Checklist")
