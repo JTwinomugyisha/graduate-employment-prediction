@@ -208,7 +208,26 @@ with tab1:
                 <p>Confidence: <strong>{proba:.0%}</strong></p>
             </div>
             """, unsafe_allow_html=True)
-            st.success("No immediate action required — continue standard placement support.")
+
+            st.markdown("### 💡 Recommended Next Steps")
+            if proba >= 0.75:
+                st.success(
+                    "**Strong signal — light-touch support.** This profile closely matches "
+                    "graduates who placed successfully. Standard next steps:\n"
+                    "- Add to the alumni job board / employer referral list\n"
+                    "- One check-in at the 30-day mark to confirm placement landed\n"
+                    "- No intensive intervention needed — focus officer time on lower-confidence cases"
+                )
+            else:
+                st.info(
+                    "**Positive but not certain — light monitoring recommended.** "
+                    f"Confidence is {proba:.0%}, above the risk threshold but not by a wide margin. "
+                    "Standard next steps:\n"
+                    "- Include in the next cohort's group job-readiness session (interview prep, CV review)\n"
+                    "- Connect with 1-2 alumni mentors in their program area for informal networking\n"
+                    "- Re-check status at 60 days — if still unplaced, treat as at-risk and escalate to "
+                    "individual outreach"
+                )
         else:
             st.markdown(f"""
             <div class="prediction-risk">
