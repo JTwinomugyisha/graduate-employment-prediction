@@ -1,6 +1,6 @@
 # Graduate Placement Prediction
 
-**A Refactory Academy capstone project — predicting graduate employment outcomes to support proactive placement.**
+**A Refactory Academy capstone project predicting graduate employment outcomes to support proactive placement.**
 
 ## Machine learning goal
 
