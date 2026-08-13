@@ -87,8 +87,8 @@ st.markdown("""
 # =====================================================================
 st.markdown("""
 <div class="header-container">
-    <h1>🎓 Graduate Placement Prediction</h1>
-    <p>Internal tool for Refactory Placement Officers — decision support, not a final decision.</p>
+    <h1>🎓Graduate Placement Prediction</h1>
+    <p>Internal tool for Placement Officers for decision support, not a final decision.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -161,7 +161,7 @@ with tab1:
 
     st.markdown("---")
     st.markdown("#### 🌍 Support Routing (Optional)")
-    st.caption("Used only to route graduates to specialized support — NOT fed into the prediction model")
+    st.caption("Used only to route graduates to specialized support, NOT fed into the prediction model")
 
     col5, col6 = st.columns(2)
     with col5:
@@ -216,16 +216,16 @@ with tab1:
                     "graduates who placed successfully. Standard next steps:\n"
                     "- Add to the alumni job board / employer referral list\n"
                     "- One check-in at the 30-day mark to confirm placement landed\n"
-                    "- No intensive intervention needed — focus officer time on lower-confidence cases"
+                    "- No intensive intervention needed, focus more on lower-confidence cases"
                 )
             else:
                 st.info(
                     "**Positive but not certain — light monitoring recommended.** "
                     f"Confidence is {proba:.0%}, above the risk threshold but not by a wide margin. "
                     "Standard next steps:\n"
-                    "- Include in the next cohort's group job-readiness session (interview prep, CV review)\n"
+                    "- Include in the next cohort's group job-readiness session (interview prep, CV review, Portfolio Development)\n"
                     "- Connect with 1-2 alumni mentors in their program area for informal networking\n"
-                    "- Re-check status at 60 days — if still unplaced, treat as at-risk and escalate to "
+                    "- Re-check status at 60 days and if still unplaced, treat as at-risk and support"
                     "individual outreach"
                 )
         else:
@@ -369,11 +369,11 @@ with tab1:
 1. Ask the graduate directly what accommodations (if any) they'd want during interviews and on the job — do not assume; this varies per person
 2. Offer accessible interview logistics as standard: remote/flexible-time option, materials in accessible format
 3. Check employer eligibility for Uganda's Persons with Disabilities Act workplace accommodation support/subsidies, and raise this with the employer upfront so accommodation cost isn't framed as solely theirs to bear
-4. Add employer to (or check against) Refactory's list of employers with positive prior experience hiring graduates with disabilities
+4. Add employer to (or check against) list of employers with positive prior experience hiring graduates with disabilities
 5. Follow up at 2 weeks post-introduction specifically to check whether any accommodation gap emerged that needs addressing
                     """)
 
-        st.caption("This prediction is decision support for Refactory staff, not a final determination.")
+        st.caption("This prediction is decision support, not a final determination.")
 
 # =====================================================================
 # TAB 2: ANALYTICS DASHBOARD
