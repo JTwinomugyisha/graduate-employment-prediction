@@ -111,7 +111,7 @@ with st.sidebar:
     - Gender
     - Graduation timing
 
-    **NOT based on (fairness-by-design):**
+    **NOT based:**
     - Nationality
     - Refugee status
     - Disability status
