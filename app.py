@@ -160,7 +160,7 @@ with tab1:
         grad_month = st.slider("Graduation Month", 1, 12, 6)
 
     st.markdown("---")
-    st.markdown("#### 🌍 Support Routing (Optional)")
+    st.markdown("#### 🌍 Support Routing")
     st.caption("Used only to route graduates to specialized support, NOT fed into the prediction model")
 
     col5, col6 = st.columns(2)
@@ -246,7 +246,7 @@ with tab1:
                     "why": f"Education level on file ({education}) is entry-level, which can filter this graduate out of employer screening before skills are even assessed.",
                     "steps": [
                         "Book a skills-audit session within 5 business days to identify a certificate or micro-credential that closes the gap fastest",
-                        "Compile a portfolio of Refactory project work — something concrete to show alongside the credential",
+                        "Compile a portfolio of project work — something concrete to show alongside the credential",
                         "Add graduate to the next available portfolio-review workshop",
                         "Target: enrolled in an upskilling track within 2 weeks",
                     ]
@@ -269,7 +269,7 @@ with tab1:
                     "title": "📍 Program Eligibility Review",
                     "why": "Graduate is outside the 18-35 youth bracket, so youth-targeted employer partnerships and funding programs may not apply.",
                     "steps": [
-                        "Cross-check this graduate against Refactory's non-youth employer partner list",
+                        "Cross-check this graduate against non-youth employer partner list",
                         "If no non-youth pathway exists yet for their program, flag to program lead as a gap",
                         "Route to general (non-age-restricted) placement channels in the meantime",
                     ]
@@ -345,7 +345,7 @@ with tab1:
             st.markdown("---")
             st.markdown("### 🌍 Specialized Support Checklist")
             st.caption(
-                "These are procedural steps within Refactory's control — not assumptions "
+                "These are procedural steps within control — not assumptions "
                 "about why this graduate hasn't been placed. Our fairness audit found no "
                 "reliable link between these statuses and placement outcomes, so treat this "
                 "as a standard support checklist, not a diagnosis."
@@ -357,9 +357,9 @@ with tab1:
                     st.markdown("""
 1. Confirm work permit / right-to-work documentation is current and on file — if expired or pending, flag to legal/admin support immediately, since this is often the actual blocker, not skill
 2. Verify prior credentials (secondary/university) have been through any required local recognition or equivalency process — assist with this if not yet done
-3. Match to Refactory's employer partners with **prior experience hiring refugee talent**, so this isn't the employer's first case
+3. Match to employer partners with **prior experience hiring refugee talent**, so this isn't the employer's first case
 4. If no such employer exists for this graduate's program, loop in the partnerships team to identify one — this is a gap to close, not work around
-5. Provide reference/verification support directly (Refactory vouching) if the graduate's local reference network is limited
+5. Provide reference/verification support directly if the graduate's local reference network is limited
                     """)
 
             if disability == "Yes":
